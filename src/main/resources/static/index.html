@@ -1,0 +1,876 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart College Attendance System</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f2f5fc;
+    color: #142d59;
+}
+
+.layout {
+    display: flex;
+    min-height: 100vh;
+    padding-bottom: 55px;
+}
+
+.sidebar {
+    width: 250px;
+    flex-shrink: 0;
+    background: linear-gradient(160deg, #10264d, #172f5b);
+    color: white;
+    padding: 30px 19px;
+    display: flex;
+    flex-direction: column;
+}
+
+.logo {
+    text-align: center;
+    margin-bottom: 42px;
+}
+
+.logo-icon {
+    font-size: 55px;
+}
+
+.logo h2 {
+    font-size: 25px;
+    line-height: 1.35;
+    margin-top: 8px;
+}
+
+.nav a {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 18px 15px;
+    margin-bottom: 9px;
+    color: white;
+    text-decoration: none;
+    border-radius: 14px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.nav a:hover,
+.nav a.active {
+    background: linear-gradient(90deg, #1978f5, #2461dc);
+}
+
+.nav-icon {
+    width: 35px;
+    font-size: 23px;
+    text-align: center;
+}
+
+.sidebar-bottom {
+    margin-top: auto;
+    text-align: center;
+    padding: 30px 5px 5px;
+}
+
+.books {
+    font-size: 65px;
+    margin-bottom: 15px;
+}
+
+.sidebar-bottom p {
+    font-weight: bold;
+    font-style: italic;
+    line-height: 1.6;
+}
+
+.main {
+    flex: 1;
+    min-width: 0;
+    padding: 25px;
+}
+
+.topbar {
+    height: 60px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 15px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.admin {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #dce5f5;
+    display: grid;
+    place-items: center;
+    font-size: 23px;
+}
+
+.hero {
+    min-height: 210px;
+    border-radius: 18px;
+    padding: 30px;
+    display: flex;
+    align-items: center;
+    color: white;
+    background:
+      linear-gradient(90deg,
+      rgba(12, 69, 158, .97),
+      rgba(20, 99, 195, .72),
+      rgba(20, 99, 195, .08)),
+      url("https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=1600&q=85");
+    background-size: cover;
+    background-position: center;
+    border: 2px solid #2584f5;
+    box-shadow: 0 7px 16px #c4d2e9;
+}
+
+.hero h1 {
+    font-size: clamp(25px, 3vw, 40px);
+    line-height: 1.3;
+}
+
+.hero p {
+    font-size: 22px;
+    margin-top: 9px;
+}
+
+.yellow-line {
+    width: 66px;
+    height: 4px;
+    background: #ffda5c;
+    margin-top: 16px;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+    margin: 25px 0;
+}
+
+.stat {
+    min-height: 125px;
+    padding: 18px;
+    border-radius: 17px;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 7px 14px #d5dced;
+}
+
+.stat-icon {
+    font-size: 42px;
+    min-width: 48px;
+    text-align: center;
+}
+
+.stat h3 {
+    font-size: 15px;
+    margin-bottom: 10px;
+}
+
+.stat h2 {
+    font-size: 34px;
+}
+
+.blue {
+    background: linear-gradient(120deg, #159af1, #238ef0);
+}
+
+.green {
+    background: linear-gradient(120deg, #60c953, #1cbd87);
+}
+
+.red {
+    background: linear-gradient(120deg, #f34d70, #dc5579);
+}
+
+.purple {
+    background: linear-gradient(120deg, #9653e7, #8051d9);
+}
+
+.content {
+    display: grid;
+    grid-template-columns: minmax(300px, .85fr) minmax(0, 1.55fr);
+    gap: 22px;
+    align-items: start;
+}
+
+.panel {
+    background: white;
+    padding: 23px;
+    border-radius: 16px;
+    box-shadow: 0 5px 18px #e0e6f2;
+    min-width: 0;
+}
+
+.panel h2 {
+    font-size: 21px;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e2e9f5;
+}
+
+.date-box {
+    background: #f5f7fc;
+    padding: 17px 13px;
+    border-radius: 14px;
+    margin-bottom: 18px;
+}
+
+.date-box label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 12px;
+}
+
+.date-box input,
+.roll-input {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #d4deef;
+    border-radius: 10px;
+    font-size: 15px;
+}
+
+.roll-input {
+    margin-bottom: 15px;
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn {
+    border: none;
+    color: white;
+    padding: 14px 10px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    flex: 1;
+}
+
+.btn-present {
+    background: #08b579;
+}
+
+.btn-absent {
+    background: #ed3030;
+}
+
+.btn:hover {
+    opacity: .87;
+}
+
+.table-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.table-heading h2 {
+    border: none;
+    margin-bottom: 12px;
+}
+
+.view-all {
+    color: #0875ed;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    background: none;
+    font-size: 15px;
+    white-space: nowrap;
+}
+
+.table-wrap {
+    overflow-x: auto;
+    max-height: 450px;
+    overflow-y: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 460px;
+}
+
+th {
+    background: #f0f3fa;
+    text-align: left;
+    padding: 13px 10px;
+    position: sticky;
+    top: 0;
+}
+
+td {
+    padding: 12px 10px;
+    border-bottom: 1px solid #e0e6f0;
+}
+
+.status {
+    display: inline-block;
+    padding: 6px 13px;
+    border-radius: 20px;
+    font-weight: bold;
+}
+
+.present-status {
+    background: #cef3df;
+    color: #079b59;
+}
+
+.absent-status {
+    background: #ffe0e2;
+    color: #dc3038;
+}
+
+.percentage-panel {
+    margin-top: 22px;
+}
+
+.percentage-panel .btn {
+    max-width: 220px;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    min-height: 55px;
+    background: #10264e;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 30px;
+    font-size: 14px;
+    z-index: 5;
+}
+
+@media(max-width: 1100px) {
+    .sidebar {
+        width: 210px;
+    }
+
+    .stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .content {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media(max-width: 650px) {
+    .layout {
+        display: block;
+    }
+
+    .sidebar {
+        width: 100%;
+        padding: 12px;
+    }
+
+    .logo {
+        margin-bottom: 10px;
+    }
+
+    .logo-icon {
+        font-size: 35px;
+    }
+
+    .nav {
+        display: flex;
+        overflow-x: auto;
+    }
+
+    .nav a {
+        white-space: nowrap;
+        padding: 12px;
+    }
+
+    .sidebar-bottom {
+        display: none;
+    }
+
+    .main {
+        padding: 13px;
+    }
+
+    .stats {
+        grid-template-columns: 1fr;
+    }
+
+    footer {
+        position: static;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="layout">
+
+<aside class="sidebar">
+
+    <div class="logo">
+        <div class="logo-icon">🎓</div>
+        <h2>Attendance<br>System</h2>
+    </div>
+
+    <nav class="nav">
+        <a class="active" onclick="showSection('dashboard', this)">
+            <span class="nav-icon">⌂</span> Dashboard
+        </a>
+
+        <a onclick="showSection('students', this)">
+            <span class="nav-icon">👥</span> Students
+        </a>
+
+        <a onclick="showSection('mark', this)">
+            <span class="nav-icon">✔</span> Mark Attendance
+        </a>
+
+        <a onclick="showSection('reports', this)">
+            <span class="nav-icon">▥</span> Reports
+        </a>
+
+        <a onclick="location.reload()">
+            <span class="nav-icon">⇥</span> Logout
+        </a>
+    </nav>
+
+    <div class="sidebar-bottom">
+        <div class="books">📚</div>
+        <p>Attend Today...<br>Achieve Tomorrow...</p>
+    </div>
+
+</aside>
+
+<main class="main">
+
+    <div class="topbar">
+        <div>▦ &nbsp; <span id="todayDate"></span></div>
+
+        <div class="admin">
+            <span class="avatar">👨🏻</span>
+            Admin⌄
+        </div>
+    </div>
+
+    <section id="dashboard">
+
+        <div class="hero">
+            <div>
+                <h1>Welcome to<br>Smart College Attendance System</h1>
+                <p>Track • Manage • Improve</p>
+                <div class="yellow-line"></div>
+            </div>
+        </div>
+
+        <div class="stats">
+
+            <div class="stat blue">
+                <div class="stat-icon">👥</div>
+                <div>
+                    <h3>Total Students</h3>
+                    <h2 id="total">0</h2>
+                </div>
+            </div>
+
+            <div class="stat green">
+                <div class="stat-icon">✔</div>
+                <div>
+                    <h3>Present Today</h3>
+                    <h2 id="present">0</h2>
+                </div>
+            </div>
+
+            <div class="stat red">
+                <div class="stat-icon">✖</div>
+                <div>
+                    <h3>Absent Today</h3>
+                    <h2 id="absent">0</h2>
+                </div>
+            </div>
+
+            <div class="stat purple">
+                <div class="stat-icon">🏆</div>
+                <div>
+                    <h3>Attendance Rate</h3>
+                    <h2 id="rate">0%</h2>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="content">
+
+            <div class="panel" id="mark">
+
+                <h2>▦ &nbsp; Mark Attendance</h2>
+
+                <div class="date-box">
+                    <label for="attendanceDate">Select Date</label>
+                    <input type="date" id="attendanceDate">
+                </div>
+
+                <input
+                    class="roll-input"
+                    id="rollNo"
+                    placeholder="Enter Student Roll Number"
+                >
+
+                <div class="actions">
+                    <button class="btn btn-present"
+                        onclick="markAttendance('P')">
+                        ✓ &nbsp; Mark Present
+                    </button>
+
+                    <button class="btn btn-absent"
+                        onclick="markAttendance('A')">
+                        ✕ &nbsp; Mark Absent
+                    </button>
+                </div>
+
+            </div>
+
+            <div class="panel" id="students">
+
+                <div class="table-heading">
+                    <h2>◷ &nbsp; Recent Attendance Records</h2>
+
+                    <button class="view-all"
+                        id="viewAllBtn"
+                        onclick="toggleRecords()">
+                        View All →
+                    </button>
+                </div>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Roll No</th>
+                                <th>Student Name</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="records">
+                            <tr>
+                                <td colspan="4">Loading records...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="panel percentage-panel" id="reports">
+
+            <h2>Check Student Attendance Percentage</h2>
+
+            <input
+                class="roll-input"
+                id="checkRoll"
+                placeholder="Enter Student Roll Number"
+            >
+
+            <button class="btn btn-present"
+                onclick="checkPercentage()">
+                Check Percentage
+            </button>
+
+            <p id="result" style="margin-top:15px;font-weight:bold;"></p>
+
+        </div>
+
+    </section>
+
+</main>
+</div>
+
+<footer>
+    <div>
+        © 2026 Smart College Attendance System |
+        Developed with ❤️ using Spring Boot
+    </div>
+
+    <div><b>Powered by Spring Boot 🍃</b></div>
+</footer>
+
+<script>
+
+let attendanceData = [];
+let showAllRecords = false;
+
+function formatDate(date) {
+    return date.getFullYear() + "-" +
+        String(date.getMonth() + 1).padStart(2, "0") + "-" +
+        String(date.getDate()).padStart(2, "0");
+}
+
+function updateDate() {
+    const now = new Date();
+
+    document.getElementById("todayDate").innerText =
+        now.toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
+        });
+
+    document.getElementById("attendanceDate").value =
+        formatDate(now);
+}
+
+function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    })[char]);
+}
+
+function normalizeStatus(status) {
+    const value = String(status || "").toLowerCase();
+
+    if (value === "p" || value === "present") return "Present";
+    if (value === "a" || value === "absent") return "Absent";
+
+    return status || "Unknown";
+}
+
+/* MARK ATTENDANCE */
+async function markAttendance(status) {
+    const rollNo =
+        document.getElementById("rollNo").value.trim();
+
+    if (!rollNo) {
+        alert("Please enter student roll number");
+        return;
+    }
+
+    const data = new URLSearchParams();
+    data.append("rollNo", rollNo);
+    data.append("status", status);
+
+    try {
+        const response = await fetch("/attendance", {
+            method: "POST",
+            body: data
+        });
+
+        if (!response.ok) {
+            throw new Error("Unable to mark attendance");
+        }
+
+        alert("Attendance marked successfully!");
+
+        document.getElementById("rollNo").value = "";
+
+        await loadAttendance();
+
+    } catch (error) {
+        alert(error.message);
+    }
+}
+
+/* FETCH ALL STORED RECORDS */
+async function loadAttendance() {
+    try {
+        const response = await fetch("/attendance");
+
+        if (!response.ok) {
+            throw new Error("Could not load attendance records");
+        }
+
+        const data = await response.json();
+
+        // Store every record returned by the backend.
+        attendanceData = Array.isArray(data) ? data : [];
+
+        updateStatistics();
+        displayRecords();
+
+    } catch (error) {
+        document.getElementById("records").innerHTML =
+            '<tr><td colspan="4">Could not load attendance records</td></tr>';
+
+        console.error("Attendance loading error:", error);
+    }
+}
+
+/* SUMMARY CARDS */
+function updateStatistics() {
+    const uniqueStudents = new Set(
+        attendanceData.map(record => String(record.rollNo))
+    );
+
+    let presentCount = 0;
+    let absentCount = 0;
+
+    attendanceData.forEach(record => {
+        const status = normalizeStatus(record.status);
+
+        if (status === "Present") presentCount++;
+        if (status === "Absent") absentCount++;
+    });
+
+    const total = presentCount + absentCount;
+
+    const rate = total > 0
+        ? Math.round((presentCount / total) * 100)
+        : 0;
+
+    document.getElementById("total").innerText = uniqueStudents.size;
+    document.getElementById("present").innerText = presentCount;
+    document.getElementById("absent").innerText = absentCount;
+    document.getElementById("rate").innerText = rate + "%";
+}
+
+/* DISPLAY RECORDS */
+function displayRecords() {
+
+    // All records are fetched from the backend.
+    // Initially display the latest five.
+    // On View All, display every fetched record.
+
+    const sortedRecords = attendanceData.slice().reverse();
+
+    const recordsToDisplay = showAllRecords
+        ? sortedRecords
+        : sortedRecords.slice(0, 5);
+
+    let rows = "";
+
+    recordsToDisplay.forEach(record => {
+
+        const status = normalizeStatus(record.status);
+
+        const statusClass = status === "Present"
+            ? "present-status"
+            : "absent-status";
+
+        rows += `
+            <tr>
+                <td>${escapeHTML(record.rollNo)}</td>
+                <td>Student ${escapeHTML(record.rollNo)}</td>
+                <td>${escapeHTML(record.date || "-")}</td>
+                <td>
+                    <span class="status ${statusClass}">
+                        ${escapeHTML(status)}
+                    </span>
+                </td>
+            </tr>
+        `;
+    });
+
+    if (recordsToDisplay.length === 0) {
+        rows = '<tr><td colspan="4">No attendance records found</td></tr>';
+    }
+
+    document.getElementById("records").innerHTML = rows;
+
+    document.getElementById("viewAllBtn").innerText =
+        showAllRecords ? "Show Less ↑" : "View All →";
+}
+
+/* VIEW ALL BUTTON */
+function toggleRecords() {
+    showAllRecords = !showAllRecords;
+    displayRecords();
+}
+
+/* ATTENDANCE PERCENTAGE */
+async function checkPercentage() {
+    const roll =
+        document.getElementById("checkRoll").value.trim();
+
+    if (!roll) {
+        alert("Enter roll number");
+        return;
+    }
+
+    try {
+        const response = await fetch(
+            "/attendance/percentage/" + encodeURIComponent(roll)
+        );
+
+        if (!response.ok) {
+            throw new Error("Unable to calculate percentage");
+        }
+
+        const result = await response.text();
+
+        document.getElementById("result").innerText = result;
+
+    } catch (error) {
+        alert(error.message);
+    }
+}
+
+/* SIDEBAR NAVIGATION */
+function showSection(id, element) {
+    document.querySelectorAll(".nav a").forEach(link => {
+        link.classList.remove("active");
+    });
+
+    element.classList.add("active");
+
+    if (id === "mark" || id === "students" || id === "reports") {
+        document.getElementById(id).scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+    } else {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    }
+}
+
+/* START DASHBOARD */
+updateDate();
+loadAttendance();
+
+</script>
+
+</body>
+</html>
